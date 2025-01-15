@@ -11,23 +11,28 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
-    return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
-      .catch(async (res) => {
+    setErrors({}); // Clear previous errors
+  
+    try {
+      await dispatch(sessionActions.login({ credential, password }));
+      closeModal(); // Close modal on success
+    } catch (res) {
+      if (res.status === 400) {
         const data = await res.json();
         if (data && data.errors) {
-          setErrors(data.errors);
+          setErrors(data.errors); // Show backend errors
         }
-      });
+      }
+    }
   };
+  
 
   return (
-    <>
+    <div className="login-container">
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="login-form">
         <label>
           Username or Email
           <input
@@ -51,8 +56,8 @@ function LoginFormModal() {
         )}
         <button type="submit">Log In</button>
       </form>
-    </>
-  );
+    </div>
+  );  
 }
 
 export default LoginFormModal;

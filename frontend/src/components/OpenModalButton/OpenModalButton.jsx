@@ -1,20 +1,42 @@
+import { useState } from 'react';
 import { useModal } from '../../context/Modal';
+import LoginFormModal from '../LoginFormModal';
+import SignupFormModal from '../SignupFormModal';
+import './OpenModal.css';
 
-function OpenModalButton({
-  modalComponent, // component to render inside the modal
-  buttonText, // text of the button that opens the modal
-  onButtonClick, // optional: callback function that will be called once the button that opens the modal is clicked
-  onModalClose // optional: callback function that will be called once the modal is closed
-}) {
+function UserOptionsButton() {
+  const [showOptions, setShowOptions] = useState(false);
   const { setModalContent, setOnModalClose } = useModal();
 
-  const onClick = () => {
-    if (onModalClose) setOnModalClose(onModalClose);
-    setModalContent(modalComponent);
-    if (typeof onButtonClick === "function") onButtonClick();
+  const toggleOptions = () => {
+    setShowOptions((prevState) => !prevState);
   };
 
-  return <button onClick={onClick}>{buttonText}</button>;
+  const openLoginModal = () => {
+    setModalContent(<LoginFormModal />);
+    setOnModalClose(null);
+    setShowOptions(false); 
+  };
+
+  const openSignupModal = () => {
+    setModalContent(<SignupFormModal />);
+    setOnModalClose(null); 
+    setShowOptions(false); 
+  };
+
+  return (
+    <div className="user-options-container">
+      <button onClick={toggleOptions} className="user-button">
+        profile
+      </button>
+      {showOptions && (
+        <div className="user-options">
+          <button onClick={openLoginModal}>Log In</button>
+          <button onClick={openSignupModal}>Sign Up</button>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default OpenModalButton;
+export default UserOptionsButton;

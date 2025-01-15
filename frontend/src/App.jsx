@@ -1,46 +1,63 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import LoginFormModal from './components/LoginFormModal';
-import * as sessionActions from './store/session';
+import HomePage from './components/HomePage/HomePage';
+import SpotDetails from './components/SpotDetails/SpotDetails';
+import { restoreUser } from './store/session';
 
-function Layout() {
-  const dispatch = useDispatch();
+const Layout = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(sessionActions.restoreUser()).then(() => {
-      setIsLoaded(true)
+    dispatch(restoreUser()).then(() => {
+      setIsLoaded(true);
     });
   }, [dispatch]);
+  
 
   return (
     <>
-      <Navigation isLoaded={isLoaded} />
+      <Navigation isLoaded={isLoaded}/>
       {isLoaded && <Outlet />}
     </>
-  );
-}
+  )
+};
 
 const router = createBrowserRouter([
-  {
-    element: <Layout />,
-    children: [
-      {
-        path: '/',
-        element: <h1>Welcome!</h1>,
-      },
-      {
-        path: '/login',
-        element: <LoginFormModal />,
-      },
-    ],
-  },
-]);
+ {
+  element: <Layout />,
+  children: [
+    {
+      path: '/',
+      element: <HomePage />
+    },
+    {
+      path: '/spots/:spotId',
+      element: <SpotDetails />
+    },
+    {
+      path: '/spots/current',
+      element: <h1>Manage Your Spots</h1>
+    },
+    {
+      path: '*',
+      element: <Navigate to='/' replace={true}/>
+    },
+  ]
+ }
+])
 
-function App() {
-  return <RouterProvider router={router} />;
+
+const App = () => {
+  return (
+    <>
+
+      <RouterProvider router={router}/>
+    </>
+    
+  )
 }
 
 export default App;

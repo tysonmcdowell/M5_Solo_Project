@@ -1,0 +1,45 @@
+.reserve-spot-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pricing-and-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spot-details-reviews {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.new-spot {
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dot {
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reserve-button {
+    height: 35px;
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.reserve-button:hover {
+    background-color: #e04848;
+}
